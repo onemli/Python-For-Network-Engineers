@@ -1,0 +1,1413 @@
+ 
+
+So far, all code has been executed sequentially - all lines of script have been executed in order in which they are written in file. This section covers program flow control:
+
+ 
+
+- branching with if/elif/else
+- repeating actions using for and while loops
+- exception handling with try/except
+
+ 
+
+
+
+### if/elif/else
+
+The if/elif/else statement allows make branches during program execution. The program goes into branch when a certain condition is met.
+
+ 
+
+In this statement only if is mandatory, elif and else are optional:
+
+
+
+- if condition is always checked first.
+- After if statement there must be some condition: if this condition is met (returns True), then actions in block if are executed.
+- elif can be used to make multiple branches, that is, to check incoming data for different conditions.
+- elif block is the same as if but it checked next. Roughly speaking, it is “otherwise if …”
+- There can be many elif blocks.
+- else block is executed if none of conditions if or elif were true.
+
+ 
+
+Example of if statement:
+
+```
+a = 9
+if a == 10:
+  print('a equal to 10')
+elif a<10:
+  print('a less than 10')
+else:
+   print('a greater than 10')
+```
+
+Output:
+
+```
+a less than 10
+```
+
+  
+
+#### Condition
+
+If expression is based on conditions: conditions are always written after if and elif. Blocks if/elif are executed only when condition returns True, so the first thing to deal with is what is true and what is false in Python.
+
+ 
+
+##### True and False
+
+ In Python, apart from obvious True and False values, all other objects also have false or true value:
+
+ True value:
+
+- any non-zero number
+- any non-empty string
+- any non-empty object
+- False value:
+- 0
+- None
+- empty string
+- empty object
+
+
+
+For example, since an empty list is a false value, it is possible to check whether list is empty:
+
+```
+empty_list = []
+non_empty_list = [1, 2, 3]
+
+if non_empty_list:
+	print('--It is not empty--')
+else:
+  print('--It is empty--')
+
+if empty_list:
+  print('**It is not empty**')
+else:
+  print('**It is empty**')
+```
+
+Output:
+
+```
+--It is not empty--
+
+**It is empty**
+```
+
+ 
+
+##### Comparison Operators
+
+Comparison operators can be used in conditions like:
+
+```
+print(5 > 6)
+print(5 > 2)
+print(5 < 2)
+print(5 == 2)
+print(5 == 5)
+print(5 >= 5)
+print(5 <= 10)
+print(8 != 10)
+```
+
+Output:
+
+```
+False
+True
+False
+False
+True
+True
+True
+True
+```
+
+ 
+
+##### Operator in
+
+Operator in allows checking for the presence of element in a sequence (for example, element in a list or substrings in a string):
+
+```
+print('Fast' in 'FastEthernet')
+print('Gigabit' in 'FastEthernet')
+
+vlan = [10, 20, 30, 40]
+
+print(10 in vlan)
+print(50 in vlan)
+```
+
+Output:
+
+```
+True
+False
+True
+False
+```
+
+ 
+
+When used with dictionaries, in condition performs check by dictionary keys:
+
+```
+ank_cisco_rtr1 = {
+  'IOS': '15.4',
+  'IP': '10.0.10.10',
+  'hostname': 'ankara_rtr1',
+  'location': 'Cankaya',
+  'model': '4451',
+  'vendor': 'Cisco'}
+
+print('IOS' in ank_cisco_rtr1 )
+print('4451' in ank_cisco_rtr1)
+```
+
+Output:
+
+```
+True
+False
+```
+
+ 
+
+##### Operator and
+
+In Python an operator returns not a boolean value but a value of one of operands.
+
+If both operands are true, result is the last value:
+
+```
+print('string1' and 'string2')
+print('string1' and 'string2' and 'string3')
+```
+
+Output:
+
+```
+string2
+string3
+```
+
+ 
+
+If one of operators is a false, result of expression will be the first false value:
+
+```
+print('' and 'string2')
+print('' and [] and 'string1')
+```
+
+Output:
+
+```
+''
+''
+```
+
+ 
+
+##### Operator or
+
+Operator or, like operator and, returns one of operands value.
+
+When checking operands, the first true operand is returned:
+
+```
+print('' or 'string1')
+print('' or [] or 'string1')
+print('string1' or 'string2')
+```
+
+Output:
+
+```
+string1
+string1
+string1
+```
+
+ 
+
+If all values are false, the last value is returned:
+
+```
+print('' or [] or {})
+```
+
+Output:
+
+```
+{}
+```
+
+ 
+
+An important feature of or operator - operands, which are after the true operand, are not calculated:
+
+```
+print('' or sorted([44, 1, 67]))
+print('' or 'string1' or sorted([44, 1, 67]))
+```
+
+ 
+
+Output:
+
+```
+[1, 44, 67]
+string1
+```
+
+ 
+
+### for
+
+Very often the same step should be performed for a set of the same data type. For example, convert all strings in list to uppercase. Python uses for loop for such purposes.
+
+For loop iterates elements of specified sequence and performs actions specified for each element.
+
+Examples of sequences of elements that can be iterated by for:
+
+- string
+- list
+- dictionary
+- range
+- Any Iterable
+
+ 
+
+An example of converting strings in a list to uppercase without for loop:
+
+```
+vlans = ['management','data' ]
+
+upper_vlans = []
+
+print(vlans[0])
+print(vlans[0].upper())
+
+upper_vlans.append(vlans[0].upper())
+
+print(upper_vlans)
+
+upper_vlans.append(vlans[1].upper())
+
+print(upper_vlans)
+```
+
+ 
+
+This solution has several nuances:
+
+the same action need to be repeated several times
+
+code is tied to a certain number of elements in vlans list
+
+ 
+
+The same steps with the for loop:
+
+```
+vlans = ['management','data' ]
+upper_vlans = []
+
+for vlan in vlans:
+	upper_vlans.append(vlan.upper())
+print(upper_vlans)
+```
+
+ 
+
+Expression: 
+
+Expression for vlan in vlans: upper_vlans.append(vlan.upper()) means "for each vlan in vlans list to perform actions in block for". In this case, vlan is the name of the variable, which refers to different values each iteration of the loop.
+
+ 
+
+For loop can work with any sequence of elements. For example, the above code used a list and the loop iterated over the elements of the list. The for loop works in a similar way with tuples.
+
+ 
+
+When working with strings for loop iterates through string characters, for example:
+
+```
+for letter in 'Cisco Systems':
+
+  print(letter)
+```
+
+Output:
+
+```
+C
+i
+s
+c
+o
+
+S
+y
+s
+t
+e
+m
+s
+```
+
+Info:
+
+Loop uses a variable named letter. Although, it could be any name, it is better when name tells you which objects go through a loop.
+
+ 
+
+Sometimes it is necessary to use sequence of numbers in loop. In this case, it is best to use range()
+
+Example of loop for with range() function:
+
+```
+for i in range(10):
+
+  print('interface FastEthernet0/{}'.format(i))
+
+ 
+```
+
+Output:
+
+```
+interface FastEthernet0/0
+interface FastEthernet0/1
+interface FastEthernet0/2
+interface FastEthernet0/3
+interface FastEthernet0/4
+interface FastEthernet0/5
+interface FastEthernet0/6
+interface FastEthernet0/7
+interface FastEthernet0/8
+interface FastEthernet0/9
+```
+
+ 
+
+This loop uses range(10). Function range() generates numbers in range from zero to specified number (in this example, up to 10) not including it.
+
+In this example, loop runs through *vlans* list, so variable can be called *vlan*:
+
+```
+vlans = [10, 20, 30, 40, 100]
+
+for vlan in vlans:
+
+  print('vlan {}'.format(vlan))
+
+  print(' name VLAN_{}'.format(vlan))
+```
+
+Output:
+
+```
+vlan 10
+ name VLAN_10
+vlan 20
+ name VLAN_20
+vlan 30
+ name VLAN_30
+vlan 40
+ name VLAN_40
+vlan 100
+ name VLAN_100
+```
+
+ 
+
+When a loop runs through dictionary, it actually goes through keys:
+
+```
+ank_cisco_rtr1 = {
+  'IOS': '15.4',
+  'IP': '10.0.10.10',
+  'hostname': 'ankara_rtr1',
+  'location': 'Cankaya',
+  'model': '4451',
+  'vendor': 'Cisco'}
+
+for k in ank_cisco_rtr1:
+  print(k)
+```
+
+Output:
+
+```
+IOS
+IP
+hostname
+location
+model
+vendor
+```
+
+ 
+
+If you want to print key-value pairs in loop, you can do this:
+
+```
+for key in ank_cisco_rtr1:
+  print(key + ' => ' + ank_cisco_rtr1[key])
+```
+
+Output:
+
+```
+IOS => 15.4
+IP => 10.0.10.10
+hostname => ankara_rtr1
+location => Cankaya
+model => 4451
+vendor => Cisco
+```
+
+ 
+
+Or use `items()` method which allows you to run loop over a key-value pair:
+
+```
+for key, value in ank_cisco_rtr1.items():
+  print(key + ' => ' + value)
+```
+
+Output:
+
+```
+IOS => 15.4
+IP => 10.0.10.10
+hostname => ankara_rtr1
+location => Cankaya
+model => 4451
+vendor => Cisco
+```
+
+ 
+
+Method items() returns a special view object that displays key-value pairs:
+
+```
+print(ank_cisco_rtr1.items())
+```
+
+Output:
+
+```
+dict_items([('IOS', '15.4'), ('IP', '10.0.10.10'), ('hostname', 'ankara_rtr1'), ('location', 'Cankaya'), ('model', '4451'), ('vendor', 'Cisco')])
+```
+
+
+
+#### Nested for
+
+ 
+
+Loops for can be nested in each other.
+
+In this example, *commands* is a list of commands to execute on each interface in the *fast_int* list:
+
+commands = ['switchport mode access', 'spanning-tree portfast', 'spanning-tree bpduguard enable']
+
+```
+fast_int = ['0/1', '0/3', '0/4', '0/7', '0/9', '0/10', '0/11']
+
+for intf in fast_int:
+  print('interface FastEthernet {}'.format(intf))
+  for command in commands:
+	print(' {}'.format(command))
+```
+
+Output:
+
+```
+interface FastEthernet 0/1
+ switchport mode access    
+ spanning-tree portfast    
+ spanning-tree bpduguard enable
+interface FastEthernet 0/3   
+ switchport mode access    
+ spanning-tree portfast     
+ spanning-tree bpduguard enable
+interface FastEthernet 0/4   
+ switchport mode access    
+ spanning-tree portfast    
+ spanning-tree bpduguard enable
+interface FastEthernet 0/7   
+ switchport mode access    
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+interface FastEthernet 0/9
+ switchport mode access
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+interface FastEthernet 0/10
+ switchport mode access
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+interface FastEthernet 0/11
+ switchport mode access
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+```
+
+ 
+
+The first for loop passes through interfaces in the `*fast_int*` list and the second through commands in commands list.
+
+
+
+#### Combination for and if
+
+Consider example of combining for and if.
+
+generate_access_port_config.py file:
+
+```
+access_template = ['switchport mode access',
+'switchport access vlan',
+'spanning-tree portfast',
+'spanning-tree bpduguard enable']
+
+
+fast_int = {'access': {'0/12':10,
+'0/14':11,
+'0/16':17,
+'0/17':150}}
+
+
+for intf, vlan in fast_int['access'].items():
+  print('interface FastEthernet' + intf)
+  for command in access_template:
+	if command.endswith('access vlan'):
+		print(' {} {}'.format(command, vlan))
+	else:
+		print(' {}'.format(command))
+```
+
+ 
+
+Comments to the code:
+
+- The first for loop iterates keys and values in nested fast_int[‘access’] dictionary
+- At this moment of loop the current key is stored in intf variable
+- At this moment of loop the current value is stored in vlan variable
+- String “interface Fastethernet” is displayed with interface number added
+- The second loop for iterates commands from access_template list
+- Since switchport access to vlan command requires a VLAN number:
+  - within second loop for commands are checked
+  - if command ends with “access vlan”
+    - command is displayed and VLAN number is added to it
+
+- in all other cases, command is simply displayed
+
+ 
+
+Result of script execution:
+
+```
+interface FastEthernet0/12
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+interface FastEthernet0/14
+ switchport mode access
+ switchport access vlan 11
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+interface FastEthernet0/16
+ switchport mode access
+ switchport access vlan 17
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+interface FastEthernet0/17
+ switchport mode access
+ switchport access vlan 150
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+```
+
+
+
+### while
+
+ 
+
+A `while` loop is another type of loop in Python.
+
+
+
+In the `while` loop, as in the if statement, you need to write a condition. If the condition is true, the actions inside the while block are executed. In this case, unlike if, after executing the code in the block, while returns to the beginning of the loop.
+
+ 
+
+When using while loops it is necessary to pay attention to whether the result when condition of loop is false will be reached.
+
+ 
+
+Consider an example:
+
+```
+a = 5
+while a > 0:
+  print(a)
+  a -= 1 # This record is equal to: a = a – 1
+```
+
+Output:
+
+```
+5
+4
+3
+2
+1
+```
+
+ 
+
+First, variable A is created with the value 5.
+
+ 
+
+Then, in while loop the condition a > 0 is specified. That is, as long as the value of a is greater than 0, actions in the body of the loop will be executed. In this case, value of variable a will be displayed.
+
+ 
+
+In addition, in the body of the loop, with each pass, the value of a is decreased by one.
+
+Info:
+
+Record a -= 1 can be a bit unusual. Python allows this format to be used instead of a = a - 1.
+
+ 
+
+Similarly, you can write: a += 1, a *= 2, a /= 2.
+
+ 
+
+Since the value of a is decreasing, the loop will not be infinite, and at some point the expression a > 0 will become false.
+
+ 
+
+The following example is based on example about password from section which describes if statement use if/elif/else statement.
+
+In that example, you had to re-run the script if the password did not meet the requirements. Using a while loop, you can make the script ask for a password again if it does not meet the requirements (check_password_with_while.py):
+
+
+
+```
+username = input('Enter username: ')
+password = input('Enter password: ')
+password_correct = False
+
+while not password_correct:
+
+	if len(password) < 8:
+		print('Password is too short\n')
+		password = input('Enter password once again: ')
+	elif username in password:
+		print('Password contains username\n')
+		password = input('Enter password once again: ' )
+	else:
+		print('Password for user {} is set'.format(username))
+		password_correct = True
+```
+
+ 
+
+In this case, while loop is useful because it returns script back to the beginning of checks and allows password to be typed again but does not require script to restart.
+
+ 
+
+Now script works like this:
+
+```
+Enter username: kerem_can
+Enter password: kerem_can
+Password contains username 
+Enter password once again: 0N3ML1
+Password is too short   
+Enter password once again: 0N3ML1..
+Password for user kerem_can is set
+```
+
+
+
+### break
+
+Operator break allows early termination of loop:
+
+break breaks current loop and continues executing the next expressions
+
+if multiple nested loops are used, break interrupts internal loop and continues to execute expressions following the block. Break can be used in loops for and while
+
+Example of loop for:
+
+```
+for num in range(10):
+	if num < 7:
+		print(num)
+	else:
+		break
+```
+
+Output:
+
+```
+0
+1
+2
+3
+4
+5
+6
+```
+
+ 
+
+Example of a loop while:
+
+```
+i = 0
+while i < 10:
+	if i == 5:
+		break
+	else:
+		print(i)
+		i += 1
+```
+
+Output:
+
+```
+0
+1
+2
+3
+4
+```
+
+ 
+
+Using break in the password request example (check_password_with_while_break.py file):
+
+```
+username = input('Enter username: ')
+
+password = input('Enter password: ')
+
+while True:
+	if len(password) < 8:
+		print('Password is too short\n')
+	elif username in password:
+		print('Password contains username\n')
+	else:
+		print('Password for user {} is set'.format(username))
+		break
+  	password = input('Enter password once again: ')
+```
+
+Now it is possible not to repeat string password = input('Enter password once again: ') in each branch, it is enough to move it to the end of loop.
+
+And as soon as correct password is entered, break will take the program out of loop while.
+
+ 
+
+### continue
+
+Operator continue returns control to the beginning of loop. That is, continue allows to «jump» remaining expressions in loop and go to the next iteration.
+
+Example of a loop for:
+
+```
+for num in range(5):
+	if num == 3:
+		continue
+  	else:
+		print(num)
+```
+
+Output:
+
+```
+0
+1
+2
+4
+```
+
+ 
+
+Example of a loop while:
+
+```
+i = 0
+while i < 6:
+	i += 1
+	if i == 3:
+		print("Skip 3")
+		continue
+		print("No one will see it")
+	else:
+		print("Current value: ", i)
+```
+
+Output:
+
+```
+Current value: 1
+Current value: 2
+Skip 3
+Current value: 4
+Current value: 5
+Current value: 6
+```
+
+ 
+
+Use of `continue` in example with password request:
+
+```
+username = input('Enter username: ')
+
+password = input('Enter password: ')
+
+password_correct = False
+
+while not password_correct:
+	if len(password) < 8:
+		print('Password is too short\n')
+	elif username in password:
+		print('Password contains username\n')
+	else:
+		print('Password for user {} is set'.format(username))
+		password_correct = True
+		continue
+
+  password = input('Enter password once again: ')
+```
+
+ 
+
+Here you can exit loop by checking password_correct flag. When correct password is entered, flag is set to True and with continue a jump to the beginning of loop is occurred by skipping the last line with password request.
+
+ 
+
+The result will be:
+
+```
+Enter username: kerem_can 
+Enter password: kerem_can
+Password contains username 
+Enter password once again: 0N3ML1
+Password is too short   
+Enter password once again: 0N3ML1..
+Password for user kerem_can is set
+```
+
+ 
+
+### pass
+
+Operator pass does nothing. Basically it is a placeholder.
+
+For example, pass can help when you need to specify a script structure. It can be set in loops, functions, classes. And it won’t affect execution of code.
+
+ 
+
+Example of using pass:
+
+```
+for num in range(5):
+	if num < 3:
+		pass
+	else:
+		print(num)
+```
+
+Output:
+
+```
+3
+4
+```
+
+ 
+
+### for/else
+
+In loop for:
+
+block else is executed if loop has completed iteration of list
+
+but it does not execute if break was applied in loop.
+
+ 
+
+Example of loop for with else (block else is executed after loop for):
+
+```
+for num in range(5):
+   print(num)
+else:
+   print("Run out of numbers")
+```
+
+Output:
+
+```
+0
+1
+2
+3
+4
+Run out of numbers
+```
+
+ 
+
+An example of loop for with else and break in loop (because of break, block else is not applied):
+
+```
+for num in range(5):
+	if num == 3:
+		break
+	else:
+		print(num)
+else:
+	print("Run out of numbers")
+```
+
+ 
+
+Example of loop for with else and continue in loop (continue does not affect else block):
+
+```
+for num in range(5):
+	if num == 3:
+		continue
+	else:
+		print(num)
+else:
+	print("Run out of numbers")
+```
+
+Output:
+
+```
+0
+1
+2
+4
+Run out of numbers
+```
+
+ 
+
+### while/else
+
+In loop while:
+
+- block else is executed if loop has completed iteration of list
+
+- but it *does not execute* if break was applied in loop.
+
+Example of a loop while with else (block else runs after loop while):
+
+```
+i = 0
+while i < 5:
+	print(i)
+	i += 1
+else:
+   print("The End")
+```
+
+Output:
+
+```
+0
+1
+2
+3
+4
+The End
+```
+
+ 
+
+An example of a loop while with else and break in loop (because of break, block else is not applied):
+
+```
+i = 0
+while i < 5:
+	if i == 3:
+		break
+	else:
+		print(i)
+		i += 1
+else:
+	print("The End")
+```
+
+ 
+
+Output:
+
+```
+0
+1
+2
+```
+
+ 
+
+### try/except
+
+If you repeated examples that were used before, there could be situations where a mistake was made. It was probably a syntax error when a colon was missing, for example. Python generally reacts quite understandably to such errors and they can easily be corrected. However, even if the code is syntactically correct, errors can occur. In Python, these errors are called exceptions.
+
+ 
+
+Examples of exceptions:
+
+```
+print(2/0)
+```
+
+Output:
+
+```
+ZeroDivisionError: division by zero
+```
+
+ 
+
+In this case, two exceptions were raised: `ZeroDivisionError` and `TypeError`.
+
+ 
+
+Most often, it is possible to predict what kind of exceptions will occur during execution of the program. For example, if program expects two numbers in input and output returns their sum and user has entered a string instead of one of numbers a TypeError error will appear as in example above.
+
+ 
+
+Python allows working with exceptions. They can be intercepted and acted upon if an exception has been occurred.
+
+ 
+
+Info:
+
+When an exception appears, program is immediately interrupted
+
+ 
+
+In order to work with exceptions try/except statement is used:
+
+```
+try:
+	print(2/0)
+except ZeroDivisionError:
+	print("You can't divide by zero")
+```
+
+Output:
+
+```
+You can't divide by zero
+```
+
+ 
+
+The try statement works as follows:
+
+- first execute expressions that are written in try block
+
+- if there are no exceptions during execution of try block, block except is skipped and the following code is executed
+
+- if there is an exception within try block, the rest part of try block is skipped
+  - if except block contains an exception which has been occurred, code in except block is executed
+  - if exception that has raised is not specified in except block, program execution is interrupted and an error is generated
+
+ 
+
+Note that Cool! string in try block is not displayed:
+
+```
+try:
+	print("Let's divide some numbers")
+  	print(2/0)
+	print('Cool!')
+except ZeroDivisionError:
+	print("You can't divide by zero")
+```
+
+Output:
+
+```
+Let's divide some numbers
+You can't divide by zero
+```
+
+ 
+
+`try/except` statement may have many except if different actions are needed depending on type of error.
+
+ 
+
+For example, divide.py script divides two numbers entered by user:
+
+```
+try:
+	a = input("Enter first number: ")
+	b = input("Enter second number: ")
+	print("Result: ", int(a)/int(b))
+except ValueError:
+	print("Please enter only numbers")
+except ZeroDivisionError:
+	print("You can't divide by zero")
+```
+
+ 
+
+Output:
+
+$ python divide.py
+
+```
+Enter first number: 3
+Enter second number: 1
+Result: 3.0
+```
+
+ 
+
+$ python divide.py
+
+```
+Enter first number: 5
+Enter second number: 0
+You can't divide by zero
+```
+
+ 
+
+$ python divide.py
+
+```
+Enter first number: cisco
+Enter second number: 3
+Please enter only numbers
+```
+
+ 
+
+In this case, `ValueError` exception raised when user has entered a string instead of a number. `ZeroDivisionError` exception raised if second number is 0.
+
+ 
+
+If you do not need to print different messages on `ValueError` and `ZeroDivisionError`, you can do this (divide_ver2.py file):
+
+```
+try:
+	a = input("Enter first number: ")
+	b = input("Enter second number: ")
+	print("Result: ", int(a)/int(b))
+except (ValueError, ZeroDivisionError):
+	print("Something went wrong...")
+```
+
+Output:
+
+$ python divide_ver2.py
+
+```
+Enter first number: cisco
+Enter second number: 4
+Something went wrong...
+```
+
+$ python divide_ver2.py
+
+```
+Enter first number: 5
+Enter second number: 0
+Something went wrong...
+```
+
+ 
+
+Info:
+
+In block except you don’t have to specify a specific exception or exceptions. In that case, all exceptions would be intercepted.
+
+ 
+
+That is not recommended!
+
+ 
+
+### try/except/else
+
+Try/except has an optional else block. It is implemented if there is no exception.
+
+
+
+For example, if you need to perform any further operations with data that user entered, you can write them in else block (divide_ver3.py file):
+
+```
+try:
+	a = input("Enter first number: ")
+	b = input("Enter second number: ")
+	result = int(a)/int(b)
+except (ValueError, ZeroDivisionError):
+	print("Something went wrong...")
+else:
+	print("Result is squared: ", result**2)
+```
+
+ 
+
+Output:
+
+$ python divide_ver3.py
+
+```
+Enter first number: 10
+Enter second number: 2
+Result is squared: 25.0
+```
+
+$ python divide_ver3.py
+
+```
+Enter first number: cisco
+Enter second number: 10
+Something went wrong...
+```
+
+
+
+ 
+
+### try/except/finally
+
+ 
+
+Block finally is another optional block in try statement. It is always implemented, whether an exception has been raised or not. It’s about actions that you have to do anyway. For example, it could be a file closing.
+
+ 
+
+File divide_ver4.py with finally block:
+
+```
+try:
+	a = input("Enter first number: ")
+	b = input("Enter second number: ")
+	result = int(a)/int(b)
+except (ValueError, ZeroDivisionError):
+	print("Something went wrong...")
+else:
+	print("Result is squared: ", result**2)
+finally:
+	print("And they lived happily ever after.")
+```
+
+Output:
+
+$ python divide_ver4.py
+
+```
+Enter first number: 10
+Enter second number: 2
+Result is squared: 25.0
+And they lived happily ever after.
+```
+
+ 
+
+$ python divide_ver4.py
+
+```
+Enter first number: cisco
+Enter second number: 2
+Something went wrong...
+And they lived happily ever after.
+```
+
+ 
+
+$ python divide_ver4.py
+
+```
+Enter first number: 4
+Enter second number: 0
+Something went wrong...
+And they lived happily ever after.
+```
+
+ 
+
+### but when?
+
+ 
+
+As a rule, same code can be written with or without exceptions.
+
+For example, this version of code:
+
+```
+while True:
+	a = input("Enter first number: ")
+	b = input("Enter second number: ")
+	try:
+		result = int(a)/int(b)
+	except ValueError:
+		print("Only digits are supported")
+	except ZeroDivisionError:
+		print("You can't divide by zero")
+	else:
+		print(result)
+		break
+```
+
+ 
+
+You can rewrite this without try/except:
+
+```
+while True:
+	a = input("Enter first number: ")
+	b = input("Enter second number: ")
+	if a.isdigit() and b.isdigit():
+		if int(b) == 0:
+			print("You can't divide by zero")
+		else:
+			print(int(a)/int(b))
+break
+else:
+print("Only digits are supported")
+```
+
+ 
+
+But the same option without exceptions will not always be simple and understandable.
+
+It is important to assess in each specific situation which version of code is more comprehensible, compact and universal - with or without exceptions.
+
+If you’ve used some other programming language before, it’s possible that use of exceptions was considered a bad form. In Python this is not true. To get a little bit more into this issue, look at the links to additional material at the end of this section.
+
+ 
